@@ -1,4 +1,5 @@
-import { outLogin } from '@/services/ant-design-pro/api';
+import { loginPath } from '@/config/constant';
+import { outLogin } from '@/services/auth';
 import { LogoutOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons';
 import { useEmotionCss } from '@ant-design/use-emotion-css';
 import { history, useModel } from '@umijs/max';
@@ -31,9 +32,9 @@ export const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu, childre
     /** 此方法会跳转到 redirect 参数所在的位置 */
     const redirect = urlParams.get('redirect');
     // Note: There may be security issues, please note
-    if (window.location.pathname !== '/user/login' && !redirect) {
+    if (window.location.pathname !== loginPath && !redirect) {
       history.replace({
-        pathname: '/user/login',
+        pathname: loginPath,
         search: stringify({
           redirect: pathname + search,
         }),
