@@ -5,7 +5,7 @@ import { setItem } from '@/utils';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { LoginForm, ProFormText } from '@ant-design/pro-components';
 import { useEmotionCss } from '@ant-design/use-emotion-css';
-import { Helmet, useModel } from '@umijs/max';
+import { Helmet, history, useModel } from '@umijs/max';
 import { Alert, message, Tabs } from 'antd';
 import React, { useState } from 'react';
 import { flushSync } from 'react-dom';
@@ -59,12 +59,14 @@ const Login: React.FC = () => {
     try {
       // 登录
       const res = await login(values);
-      console.log(res);
       message.success('登录成功！');
-      setItem('token', res?.data?.token);
+      setItem('token', res?.token);
       await fetchUserInfo();
-    } catch (error) {
-      message.error('登录失败，请重试！');
+      history.push('/');
+    } catch (error: any) {
+      const msg = error?.response?.data?.error || '请求出错，请稍后重试';
+      message.error(msg);
+      setUserLoginState({ status: msg });
     }
   };
 
@@ -74,12 +76,15 @@ const Login: React.FC = () => {
       const msg = await registerApi(values);
       setUserLoginState(msg);
       message.success('注册成功！');
-    } catch (error) {
-      message.error('登录失败，请重试！');
+    } catch (error: any) {
+      const msg = error?.response?.data?.error || '请求出错，请稍后重试';
+      message.error(msg);
+      setUserLoginState({ status: msg });
     }
   };
 
   const handleSubmit = async (values: API.LoginParams) => {
+    setUserLoginState({});
     if (type === 'login') {
       loginFn(values);
     }
@@ -130,9 +135,9 @@ const Login: React.FC = () => {
               },
             ]}
           />
+          {status && <LoginMessage content={status} />}
           {type === 'login' ? (
             <>
-              {status === 'error' && <LoginMessage content={'账户或密码错误)'} />}
               <ProFormText
                 name="account"
                 fieldProps={{
@@ -164,7 +169,6 @@ const Login: React.FC = () => {
             </>
           ) : (
             <>
-              {status === 'error' && <LoginMessage content={'注册出错)'} />}
               <ProFormText
                 name="account"
                 fieldProps={{

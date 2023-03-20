@@ -10,6 +10,7 @@ import { AvatarDropdown, AvatarName } from './components/RightContent/AvatarDrop
 import { loginPath } from './config/constant';
 import { errorConfig } from './requestErrorConfig';
 import { currentUser as queryCurrentUser } from './services/auth';
+
 const isDev = process.env.NODE_ENV === 'development';
 
 /**
@@ -23,11 +24,9 @@ export async function getInitialState(): Promise<{
 }> {
   const fetchUserInfo = async () => {
     try {
-      const msg = await queryCurrentUser({
+      return await queryCurrentUser({
         skipErrorHandler: true,
       });
-      console.log(msg);
-      return msg.data;
     } catch (error) {
       history.push(loginPath);
     }
@@ -68,6 +67,7 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
       const { location } = history;
       // 如果没有登录，重定向到 login
       if (!initialState?.currentUser && location.pathname !== loginPath) {
+        console.log(initialState);
         console.log(1233);
         history.push(loginPath);
       }

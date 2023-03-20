@@ -24,6 +24,7 @@ export async function login(body: API.LoginParams) {
       'Content-Type': 'application/json',
     },
     data: body,
+    skipErrorHandler: true,
   });
 }
 

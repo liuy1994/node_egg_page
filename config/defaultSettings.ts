@@ -6,7 +6,9 @@ import { ProLayoutProps } from '@ant-design/pro-components';
 const Settings: ProLayoutProps & {
   pwa?: boolean;
   logo?: string;
+  locale?: boolean;
 } = {
+  locale: false as any,
   navTheme: 'light',
   // 拂晓蓝
   colorPrimary: '#1890ff',
