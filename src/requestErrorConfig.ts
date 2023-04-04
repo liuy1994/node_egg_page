@@ -1,7 +1,7 @@
-﻿import { getItem } from '@/utils';
-import type { RequestOptions } from '@@/plugin-request/request';
-import type { RequestConfig } from '@umijs/max';
-import { message } from 'antd';
+﻿import { getItem } from "@/utils"
+import type { RequestOptions } from "@@/plugin-request/request"
+import type { RequestConfig } from "@umijs/max"
+import { message } from "antd"
 
 // 错误处理方案： 错误类型
 enum ErrorShowType {
@@ -13,11 +13,11 @@ enum ErrorShowType {
 }
 // 与后端约定的响应数据格式
 interface ResponseStructure {
-  success: boolean;
-  data: any;
-  errorCode?: number;
-  errorMessage?: string;
-  showType?: ErrorShowType;
+  success: boolean
+  data: any
+  errorCode?: number
+  errorMessage?: string
+  showType?: ErrorShowType
 }
 
 /**
@@ -31,20 +31,20 @@ export const errorConfig: RequestConfig = {
     // 错误抛出
     errorThrower: (res) => {
       const { success, data, errorCode, errorMessage, showType } =
-        res as unknown as ResponseStructure;
+        res as unknown as ResponseStructure
       if (!success) {
-        const error: any = new Error(errorMessage);
-        error.name = 'BizError';
-        error.info = { errorCode, errorMessage, showType, data };
-        throw error; // 抛出自制的错误
+        const error: any = new Error(errorMessage)
+        error.name = "BizError"
+        error.info = { errorCode, errorMessage, showType, data }
+        throw error // 抛出自制的错误
       }
     },
     // 错误接收及处理
     errorHandler: (error: any, opts: any) => {
-      if (opts?.skipErrorHandler) throw error;
-      const msg = error?.response?.data?.error || '请求出错，请稍后重试';
+      if (opts?.skipErrorHandler) throw error
+      const msg = error?.response?.data?.error || "请求出错，请稍后重试"
       if (msg) {
-        message.error(msg);
+        message.error(msg)
       }
     },
   },
@@ -53,11 +53,11 @@ export const errorConfig: RequestConfig = {
   requestInterceptors: [
     (config: RequestOptions) => {
       if (config.headers) {
-        if (!config.url?.includes('/api/login')) {
-          config.headers['authorization'] = `Bearer ${getItem('token')}`;
+        if (!config.url?.includes("/api/login")) {
+          config.headers["authorization"] = `Bearer ${getItem("token")}`
         }
       }
-      return config;
+      return config
     },
   ],
 
@@ -65,8 +65,8 @@ export const errorConfig: RequestConfig = {
   responseInterceptors: [
     (response) => {
       // 拦截响应数据，进行个性化处理
-      const { data } = response as unknown as ResponseStructure;
-      return data;
+      const { data } = response as unknown as ResponseStructure
+      return data
     },
   ],
-};
+}

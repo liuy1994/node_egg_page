@@ -1,5 +1,5 @@
-import { QuestionCircleOutlined } from '@ant-design/icons';
-import { SelectLang as UmiSelectLang } from '@umijs/max';
+import { QuestionCircleOutlined } from "@ant-design/icons"
+import { SelectLang as UmiSelectLang } from "@umijs/max"
 
 export const SelectLang = () => {
   return (
@@ -8,21 +8,21 @@ export const SelectLang = () => {
         padding: 4,
       }}
     />
-  );
-};
+  )
+}
 
 export const Question = () => {
   return (
     <div
       style={{
-        display: 'flex',
+        display: "flex",
         height: 26,
       }}
       onClick={() => {
-        window.open('https://pro.ant.design/docs/getting-started');
+        window.open("https://pro.ant.design/docs/getting-started")
       }}
     >
       <QuestionCircleOutlined />
     </div>
-  );
-};
+  )
+}

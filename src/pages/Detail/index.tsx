@@ -1,4 +1,4 @@
-import PageContainerWrapper from '@/components/PageContainerWrapper';
+import PageContainerWrapper from "@/components/PageContainerWrapper"
 
 const Detail = () => {
   return (
@@ -6,18 +6,18 @@ const Detail = () => {
       breadcrumb={{
         items: [
           {
-            title: '列表',
-            path: '/list',
+            title: "列表",
+            path: "/list",
           },
           {
-            title: '详情',
+            title: "详情",
           },
         ],
       }}
     >
       Detail
     </PageContainerWrapper>
-  );
-};
+  )
+}
 
-export default Detail;
+export default Detail
