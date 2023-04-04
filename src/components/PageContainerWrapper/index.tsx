@@ -1,15 +1,15 @@
-import { PageContainer } from '@ant-design/pro-components';
-import { PageContainerProps } from '@ant-design/pro-layout/es/components/PageContainer';
-import { Link } from '@umijs/max';
-import { merge } from 'lodash';
+import { PageContainer } from "@ant-design/pro-components"
+import { PageContainerProps } from "@ant-design/pro-layout/es/components/PageContainer"
+import { Link } from "@umijs/max"
+import { merge } from "lodash"
 type Props = PageContainerProps
 
 const PageContainerWrapper = (props: Props) => {
   const breadcrumbItemRender = (route: any) => {
-    return route.path ? <Link to={route.path}>{route.title}</Link> : <span>{route.title}11</span>;
-  };
+    return route.path ? <Link to={route.path}>{route.title}</Link> : <span>{route.title}</span>
+  }
 
-  const { children, ...restProps } = props;
+  const { children, ...restProps } = props
   return (
     <PageContainer
       {...merge(restProps, {
@@ -20,6 +20,6 @@ const PageContainerWrapper = (props: Props) => {
     >
       {children}
     </PageContainer>
-  );
-};
-export default PageContainerWrapper;
+  )
+}
+export default PageContainerWrapper
