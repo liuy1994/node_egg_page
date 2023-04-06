@@ -25,7 +25,7 @@ class Oss {
     })
   }
 
-  async upload(file: File) {
+  async upload(file: File): Promise<string> {
     let date = new Date()
     let year = date.getFullYear()
     let month = date.getMonth() + 1

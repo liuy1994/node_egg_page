@@ -44,7 +44,6 @@ const Edit = () => {
   }
 
   const onFinish = async (values: any) => {
-    console.log(values)
     const { id } = values
     if (id) {
       await updateContentAPi(values)

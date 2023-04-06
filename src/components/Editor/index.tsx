@@ -1,7 +1,10 @@
+import Oss from "@/utils/oss"
 import { IDomEditor, IEditorConfig, IToolbarConfig } from "@wangeditor/editor"
 import { Editor, Toolbar } from "@wangeditor/editor-for-react"
 import { useEffect, useState } from "react"
 import "./index.less"
+
+const oss = new Oss()
 
 type InsertFnType = (url: string, alt: string, href: string) => void
 interface Props {
@@ -36,14 +39,11 @@ const CustomerEditor = (props: Props) => {
     placeholder: "请输入内容...",
     MENU_CONF: {
       uploadImage: {
-        server: "/api/upload",
         async customUpload(file: File, insertFn: InsertFnType) {
           // TS 语法
           console.log(file, insertFn)
-          // file 即选中的文件
-          // 自己实现上传，并得到图片 url alt href
-          // 最后插入图片
-          // insertFn(url, alt, href)
+          const url = await oss.upload(file)
+          insertFn(url, file.name, url)
         },
       },
     },
