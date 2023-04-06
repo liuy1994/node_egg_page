@@ -27,7 +27,7 @@ const LoginMessage: React.FC<{
 }
 
 const Login: React.FC = () => {
-  const [userLoginState, setUserLoginState] = useState<API.LoginResult>({})
+  const [userLoginState, setUserLoginState] = useState<any>({})
   const { initialState, setInitialState } = useModel("@@initialState")
   const [type, setType] = useState<string>("login")
 
@@ -83,7 +83,7 @@ const Login: React.FC = () => {
     }
   }
 
-  const handleSubmit = async (values: API.LoginParams) => {
+  const handleSubmit = async (values: any) => {
     setUserLoginState({})
     if (type === "login") {
       loginFn(values)
@@ -117,7 +117,7 @@ const Login: React.FC = () => {
             autoLogin: true,
           }}
           onFinish={async (values) => {
-            await handleSubmit(values as API.LoginParams)
+            await handleSubmit(values as any)
           }}
         >
           <Tabs

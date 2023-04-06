@@ -1,6 +1,8 @@
-﻿import { getItem } from "@/utils"
+﻿import { loginPath } from "@/config/constant"
+import { getItem } from "@/utils"
 import type { RequestOptions } from "@@/plugin-request/request"
 import type { RequestConfig } from "@umijs/max"
+import { history } from "@umijs/max"
 import { message } from "antd"
 
 // 错误处理方案： 错误类型
@@ -45,6 +47,9 @@ export const errorConfig: RequestConfig = {
       const msg = error?.response?.data?.error || "请求出错，请稍后重试"
       if (msg) {
         message.error(msg)
+      }
+      if (error?.response?.status === 401) {
+        history.push(loginPath)
       }
     },
   },

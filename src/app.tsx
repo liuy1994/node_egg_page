@@ -18,9 +18,9 @@ const isDev = process.env.NODE_ENV === "development"
  * */
 export async function getInitialState(): Promise<{
   settings?: Partial<LayoutSettings>
-  currentUser?: API.CurrentUser
+  currentUser?: any
   loading?: boolean
-  fetchUserInfo?: () => Promise<API.CurrentUser | undefined>
+  fetchUserInfo?: () => Promise<any>
 }> {
   const fetchUserInfo = async () => {
     try {

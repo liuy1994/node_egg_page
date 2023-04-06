@@ -43,6 +43,7 @@ const List = () => {
         }}
         request={getListApi}
         columns={columns}
+        rowKey={"id"}
         toolBarRender={() => [
           <Link to={"/create"} key={"create"}>
             <Button type={"primary"}>新增</Button>
