@@ -7,5 +7,7 @@ module.exports = {
   rules: {
     quotes: ["error", "double"],
     semi: ["error", "never"],
+    "@typescript-eslint/no-use-before-define": "off",
+    "@typescript-eslint/no-unused-expressions": "off",
   },
 }

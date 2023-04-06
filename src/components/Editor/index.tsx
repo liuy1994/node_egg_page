@@ -15,7 +15,11 @@ const CustomerEditor = (props: Props) => {
   const [editor, setEditor] = useState<IDomEditor | null>(null) // TS 语法
 
   // 编辑器内容
-  const [html, setHtml] = useState<string>(value || "")
+  const [html, setHtml] = useState<string>("")
+
+  useEffect(() => {
+    setHtml(value)
+  }, [value])
 
   useEffect(() => {
     _onChange(html)
