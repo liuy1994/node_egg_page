@@ -1,0 +1,30 @@
+.markdown_wrapper {
+  height: calc(100vh - 222px);
+  .left,
+  .right {
+    height: 100%;
+  }
+  .left {
+    & > .ant-input {
+      height: 100%;
+    }
+  }
+  .right {
+    background-color: #fff;
+    border: 1px solid;
+
+    // reset
+    ul {
+      list-style-type: disc;
+    }
+    ul ul {
+      list-style-type: circle;
+    }
+    ul ul ul {
+      list-style-type: square;
+    }
+    ol {
+      list-style-type: decimal;
+    }
+  }
+}

@@ -5,6 +5,7 @@ export default [
   { path: "/create", name: "新增", icon: "smile", component: "./Edit" },
   { path: "/edit/:id", name: "编辑", icon: "smile", component: "./Edit", hideInMenu: true },
   { path: "/upload", name: "上传", icon: "smile", component: "./Upload" },
+  { path: "/markdown", name: "Markdown", icon: "smile", component: "./Markdown" },
   { path: "/", redirect: "/list" },
   { path: "*", layout: false, component: "./404" },
 ]
