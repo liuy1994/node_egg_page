@@ -14,7 +14,7 @@ CMD yarn
 
 CMD yarn build
 
-CMD sshpass -f /pwd scp ./haha root@43.142.101.138:/frontend/www/demo-page
+CMD sshpass -f /pwd scp -rf ./dist/** root@43.142.101.138:/frontend/www/demo-page
 
 CMD exit
 
