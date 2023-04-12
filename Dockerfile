@@ -1,12 +1,8 @@
 FROM node:18.15.0-buster
 
-COPY ~/pwd ./temp
-
 COPY . ./temp
 
 WORKDIR /temp
-
-CMD ls
 
 CMD apt update
 
