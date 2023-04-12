@@ -6,6 +6,8 @@ COPY . ./temp
 
 WORKDIR /temp
 
+CMD ls
+
 CMD apt update
 
 CMD apt install sshpass
