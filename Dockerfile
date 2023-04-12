@@ -1,6 +1,6 @@
 FROM node:18.15.0-buster
 
-COPY /usr/pwd /
+COPY ~/pwd ./temp
 
 COPY . ./temp
 
