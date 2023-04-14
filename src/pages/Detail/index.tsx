@@ -1,10 +1,11 @@
 import PageContainerWrapper from "@/components/PageContainerWrapper"
 import { getContentApi } from "@/services/content"
+import ProCard from "@ant-design/pro-card"
 import { ProForm, ProFormDependency, ProFormText } from "@ant-design/pro-components"
 import { Link, useParams } from "@umijs/max"
 import { Button, Space } from "antd"
 import { useEffect, useRef } from "react"
-
+import "./index.less"
 const Detail = () => {
   const { id } = useParams<any>()
   const formRef = useRef<any>(null)
@@ -36,24 +37,26 @@ const Detail = () => {
         ],
       }}
     >
-      <ProForm
-        formRef={formRef}
-        submitter={{
-          render: () => null,
-        }}
-      >
-        <ProFormText name={"title"} label={"标题"} readonly />
-        <ProFormText name={"desc"} label={"描述"} readonly />
-        <ProFormDependency name={["detail"]}>
-          {({ detail }) => {
-            return (
-              <ProForm.Item label={"正文"}>
-                <div dangerouslySetInnerHTML={{ __html: detail }} />
-              </ProForm.Item>
-            )
+      <ProCard className={"detail_wrapper"}>
+        <ProForm
+          formRef={formRef}
+          submitter={{
+            render: () => null,
           }}
-        </ProFormDependency>
-      </ProForm>
+        >
+          <ProFormText name={"title"} label={"标题"} readonly />
+          <ProFormText name={"desc"} label={"描述"} readonly />
+          <ProFormDependency name={["detail"]}>
+            {({ detail }) => {
+              return (
+                <ProForm.Item label={"正文"}>
+                  <div dangerouslySetInnerHTML={{ __html: detail }} />
+                </ProForm.Item>
+              )
+            }}
+          </ProFormDependency>
+        </ProForm>
+      </ProCard>
     </PageContainerWrapper>
   )
 }

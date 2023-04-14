@@ -1,6 +1,7 @@
 import Editor from "@/components/Editor"
 import PageContainerWrapper from "@/components/PageContainerWrapper"
 import { createContentAPi, getContentApi, updateContentAPi } from "@/services/content"
+import ProCard from "@ant-design/pro-card"
 import {
   ProForm,
   ProFormDependency,
@@ -68,23 +69,25 @@ const Edit = () => {
         items: breadcrumbItems,
       }}
     >
-      <ProForm formRef={formRef} onFinish={onFinish}>
-        <ProFormText name={"id"} hidden />
-        <ProFormText name={"title"} label={"标题"} rules={[{ required: true }]} />
-        <ProFormTextArea name={"desc"} label={"描述"} />
-        <ProForm.Item
-          label={"正文"}
-          name={"detail"}
-          rules={[{ required: true, validator: validateDetail, validateTrigger: ["onBlur"] }]}
-        >
-          <Editor />
-        </ProForm.Item>
-        <ProFormDependency name={["detail"]} hidden>
-          {({ detail }) => {
-            return <div dangerouslySetInnerHTML={{ __html: detail }} ref={detailDomRef} />
-          }}
-        </ProFormDependency>
-      </ProForm>
+      <ProCard>
+        <ProForm formRef={formRef} onFinish={onFinish}>
+          <ProFormText name={"id"} hidden />
+          <ProFormText name={"title"} label={"标题"} rules={[{ required: true }]} />
+          <ProFormTextArea name={"desc"} label={"描述"} />
+          <ProForm.Item
+            label={"正文"}
+            name={"detail"}
+            rules={[{ required: true, validator: validateDetail, validateTrigger: ["onBlur"] }]}
+          >
+            <Editor />
+          </ProForm.Item>
+          <ProFormDependency name={["detail"]} hidden>
+            {({ detail }) => {
+              return <div dangerouslySetInnerHTML={{ __html: detail }} ref={detailDomRef} />
+            }}
+          </ProFormDependency>
+        </ProForm>
+      </ProCard>
     </PageContainerWrapper>
   )
 }

@@ -65,7 +65,6 @@ const Login: React.FC = () => {
       history.push("/")
     } catch (error: any) {
       const msg = error?.response?.data?.error || "请求出错，请稍后重试"
-      message.error(msg)
       setUserLoginState({ status: msg })
     }
   }
@@ -76,9 +75,10 @@ const Login: React.FC = () => {
       const msg = await registerApi(values)
       setUserLoginState(msg)
       message.success("注册成功！")
+      setType("login")
+      setUserLoginState({})
     } catch (error: any) {
       const msg = error?.response?.data?.error || "请求出错，请稍后重试"
-      message.error(msg)
       setUserLoginState({ status: msg })
     }
   }
@@ -194,6 +194,34 @@ const Login: React.FC = () => {
                   {
                     required: true,
                     message: "请输入昵称!",
+                  },
+                ]}
+              />
+              <ProFormText
+                name="mobile"
+                fieldProps={{
+                  size: "large",
+                  prefix: <UserOutlined />,
+                }}
+                placeholder={"手机号"}
+                rules={[
+                  {
+                    required: true,
+                    message: "请输入手机号!",
+                  },
+                ]}
+              />
+              <ProFormText
+                name="email"
+                fieldProps={{
+                  size: "large",
+                  prefix: <UserOutlined />,
+                }}
+                placeholder={"邮箱"}
+                rules={[
+                  {
+                    required: true,
+                    message: "请输入邮箱!",
                   },
                 ]}
               />
