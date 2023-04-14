@@ -33,18 +33,23 @@ const CustomerEditor = (props: Props) => {
     excludeKeys: ["fullScreen"],
   }
 
+  const customUpload = async (file: File, insertFn: InsertFnType) => {
+    // TS 语法
+    console.log(file, insertFn)
+    const url = await oss.upload(file)
+    insertFn(url, file.name, url)
+  }
+
   // 编辑器配置
   const editorConfig: Partial<IEditorConfig> = {
     // TS 语法
     placeholder: "请输入内容...",
     MENU_CONF: {
       uploadImage: {
-        async customUpload(file: File, insertFn: InsertFnType) {
-          // TS 语法
-          console.log(file, insertFn)
-          const url = await oss.upload(file)
-          insertFn(url, file.name, url)
-        },
+        customUpload,
+      },
+      uploadVideo: {
+        customUpload,
       },
     },
   }

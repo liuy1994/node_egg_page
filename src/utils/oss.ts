@@ -43,7 +43,11 @@ class Oss {
         },
         (err: any, data: any) => {
           if (err) {
-            message.success("文件上传失败，请稍后重试")
+            if (err?.message?.includes("CORS")) {
+              message.error("暂时关闭了上传功能")
+            } else {
+              message.error("文件上传失败，请稍后重试")
+            }
             reject(err)
           } else {
             resolve(`https://${data.Location}`)
