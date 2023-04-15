@@ -10,9 +10,10 @@ type InsertFnType = (url: string, alt: string, href: string) => void
 interface Props {
   value?: any
   onChange?: any
+  readOnly?: boolean
 }
 const CustomerEditor = (props: Props) => {
-  const { value, onChange: _onChange } = props
+  const { value, onChange: _onChange, readOnly = false } = props
 
   // editor 实例
   const [editor, setEditor] = useState<IDomEditor | null>(null) // TS 语法
@@ -42,6 +43,7 @@ const CustomerEditor = (props: Props) => {
 
   // 编辑器配置
   const editorConfig: Partial<IEditorConfig> = {
+    readOnly: readOnly,
     // TS 语法
     placeholder: "请输入内容...",
     MENU_CONF: {
@@ -64,20 +66,22 @@ const CustomerEditor = (props: Props) => {
   }, [editor])
 
   return (
-    <div className={"editor_wrapper"}>
-      <Toolbar
-        editor={editor}
-        defaultConfig={toolbarConfig}
-        mode="default"
-        style={{ borderBottom: "1px solid #ccc" }}
-      />
+    <div className={`editor_wrapper ${readOnly && "is_readOnly"}`}>
+      {!readOnly && (
+        <Toolbar
+          editor={editor}
+          defaultConfig={toolbarConfig}
+          mode="default"
+          style={{ borderBottom: "1px solid #ccc" }}
+        />
+      )}
       <Editor
         defaultConfig={editorConfig}
         value={html}
         onCreated={setEditor}
         onChange={(editor) => setHtml(editor.getHtml())}
         mode="default"
-        style={{ height: "500px", overflowY: "hidden" }}
+        style={{ height: readOnly ? "auto" : "500px", overflowY: "hidden" }}
       />
     </div>
   )
