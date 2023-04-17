@@ -14,12 +14,20 @@ interface Props {
 }
 const CustomerEditor = (props: Props) => {
   const { value, onChange: _onChange, readOnly = false } = props
+  let preValue: any = null
 
   // editor 实例
   const [editor, setEditor] = useState<IDomEditor | null>(null) // TS 语法
 
   // 编辑器内容
   const [html, setHtml] = useState<string>("")
+
+  useEffect(() => {
+    if (value && preValue !== value) {
+      setHtml(value)
+      preValue = value
+    }
+  }, [value])
 
   useEffect(() => {
     _onChange(html)
@@ -73,7 +81,7 @@ const CustomerEditor = (props: Props) => {
       )}
       <Editor
         defaultConfig={editorConfig}
-        value={html || value}
+        value={html}
         onCreated={setEditor}
         onChange={(editor) => setHtml(editor.getHtml())}
         mode="default"

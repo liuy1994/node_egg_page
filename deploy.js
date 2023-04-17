@@ -101,10 +101,6 @@ const uploadFile = (conn) => {
     sftp.fastPut(localZipPath, remoteZipPath, (err) => {
       if (err) throw err
       console.log("文件上传成功")
-      // comment.forEach(shell => {
-      //   console.log(shell);
-      //   execShell(conn, shell)
-      // })
       execShell(conn, comment.join("\n"))
     })
   })
