@@ -32,6 +32,7 @@ const Markdown = () => {
       submitter={{
         render: (...rest: any) => {
           console.log(rest)
+          return null
         },
       }}
     >

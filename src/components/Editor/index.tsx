@@ -22,10 +22,6 @@ const CustomerEditor = (props: Props) => {
   const [html, setHtml] = useState<string>("")
 
   useEffect(() => {
-    setHtml(value)
-  }, [value])
-
-  useEffect(() => {
     _onChange(html)
   }, [html])
 
@@ -77,7 +73,7 @@ const CustomerEditor = (props: Props) => {
       )}
       <Editor
         defaultConfig={editorConfig}
-        value={html}
+        value={html || value}
         onCreated={setEditor}
         onChange={(editor) => setHtml(editor.getHtml())}
         mode="default"
