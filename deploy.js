@@ -1,14 +1,7 @@
-#! /bin/env node
-const { readFileSync, unlinkSync } = require("fs")
-const { resolve } = require("path")
-const compressing = require("compressing")
+const { readFileSync } = require("fs")
 const { Client } = require("ssh2")
-
-const sshConfig = {
-  host: "43.142.101.138",
-  username: "ubuntu",
-  privateKey: readFileSync("C:/Users/admin/.ssh/id_rsa"),
-}
+const compressing = require("compressing")
+const { resolve } = require("path")
 
 // 服务器的nginx存放资源的地址
 const servicePath = "/data/www/"
@@ -29,31 +22,65 @@ let remoteZipPath = servicePath + zipFileName
 const comment = [
   `cd ${servicePath}`,
   // 解压zip文件呢
-  `unzip -oq -d ${servicePath}${targetDirName}_back ${zipFileName}`,
+  `unzip -oq -d ${servicePath}${targetDirName}_back ./${zipFileName}`,
+  "ls",
   // 删除原来的文件目录
-  `sudo rm -rf ${servicePath}${targetDirName}`,
+  `rm -rf ${servicePath}${targetDirName}/**`,
   // 重命名解压问价
-  `sudo mv  ${servicePath}${targetDirName}_back/${localDist} ${servicePath}${targetDirName}`,
+  `mv ${servicePath}${targetDirName}_back/${localDist}/** ${servicePath}${targetDirName}/`,
   // 删除zip文件
-  `rm -f ${zipFileName}`,
+  `sudo rm -f ${servicePath}${zipFileName}`,
   // 删除解压文件夹
-  `rm -rf ${servicePath}${targetDirName}_back`,
+  `sudo rm -rf ${servicePath}${targetDirName}_back`,
   // 重置读写权限为755
   `sudo chmod 755 ${servicePath}`,
-  "exit",
+  // "exit",
   "close",
 ]
 
-function createSSH() {
+const execShell = (conn, shell, cb) => {
+  conn.exec(shell, (err, stream) => {
+    if (err) throw err
+    stream
+      .on("close", (code, signal) => {
+        conn.end()
+      })
+      .on("data", (data) => {
+        console.log("STDOUT: " + data)
+      })
+    cb && cb()
+  })
+}
+
+const main = () => {
+  compressing.zip
+    .compressDir(localDistPath, localZipPath)
+    .then(() => {
+      console.log("文件夹zip完毕")
+      createSSH()
+    })
+    .catch((err) => {
+      console.log("文件夹zip出错！", err)
+    })
+}
+
+const createSSH = () => {
   const conn = new Client()
   conn
     .on("ready", () => {
+      console.log("Client :: ready")
       chmod777(conn)
+      // execShell(conn, comment.join("\n"))
     })
-    .connect(sshConfig)
+    .connect({
+      host: "43.142.101.138",
+      port: 22,
+      username: "ubuntu",
+      privateKey: readFileSync("C:/Users/admin/.ssh/id_rsa"),
+    })
 }
 
-function chmod777(conn) {
+const chmod777 = (conn) => {
   conn.exec("sudo chmod 777 " + servicePath, (err, stream) => {
     if (err) throw err
     stream
@@ -68,51 +95,19 @@ function chmod777(conn) {
   })
 }
 
-function uploadFile(conn, params = { localPath: localZipPath, remotePath: remoteZipPath }) {
-  const { localPath, remotePath } = params
+const uploadFile = (conn) => {
   conn.sftp((err, sftp) => {
     if (err) throw err
-    sftp.fastPut(localPath, remotePath, (err) => {
+    sftp.fastPut(localZipPath, remoteZipPath, (err) => {
       if (err) throw err
       console.log("文件上传成功")
-      execShell(conn)
+      // comment.forEach(shell => {
+      //   console.log(shell);
+      //   execShell(conn, shell)
+      // })
+      execShell(conn, comment.join("\n"))
     })
   })
-}
-
-function execShell(conn) {
-  try {
-    conn.shell((err, stream) => {
-      if (err) {
-        console.log("err")
-        throw err
-      }
-      stream
-        .on("close", () => {
-          console.log("发布完成！！")
-          unlinkSync(zipFileName)
-          conn.end()
-        })
-        .on("data", function (data) {
-          // console.log("STDOUT: " + data)
-        })
-      stream.end(comment.join("\n"))
-    })
-  } catch (e) {
-    console.log(e)
-  }
-}
-
-function main() {
-  compressing.zip
-    .compressDir(localDistPath, localZipPath)
-    .then(() => {
-      console.log("文件夹zip完毕")
-      createSSH()
-    })
-    .catch((err) => {
-      console.log("文件夹zip出错！", err)
-    })
 }
 
 main()
