@@ -10,6 +10,7 @@ import { AvatarDropdown, AvatarName } from "./components/RightContent/AvatarDrop
 import { loginPath } from "./config/constant"
 import { errorConfig } from "./requestErrorConfig"
 import { currentUser as queryCurrentUser } from "./services/auth"
+export { qiankun } from "@/utils/qiankun"
 
 const isDev = process.env.NODE_ENV === "development"
 

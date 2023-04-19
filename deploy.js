@@ -25,9 +25,9 @@ const comment = [
   `unzip -oq -d ${servicePath}${targetDirName}_back ./${zipFileName}`,
   "ls",
   // 删除原来的文件目录
-  `rm -rf ${servicePath}${targetDirName}/**`,
+  `sudo rm -rf ${servicePath}${targetDirName}/**`,
   // 重命名解压问价
-  `mv ${servicePath}${targetDirName}_back/${localDist}/** ${servicePath}${targetDirName}/`,
+  `sudo mv ${servicePath}${targetDirName}_back/${localDist}/** ${servicePath}${targetDirName}/`,
   // 删除zip文件
   `sudo rm -f ${servicePath}${zipFileName}`,
   // 删除解压文件夹

@@ -155,4 +155,13 @@ export default defineConfig({
   codeSplitting: {
     jsStrategy: "granularChunks",
   },
+  qiankun: {
+    master: {
+      prefetch: true,
+      sandbox: {
+        // experimentalStyleIsolation: true,
+        strictStyleIsolation: true,
+      },
+    },
+  },
 })

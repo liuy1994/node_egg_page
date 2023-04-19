@@ -1,10 +1,12 @@
 import ProCard from "@ant-design/pro-card"
-import { marked } from "marked"
+import { MicroAppWithMemoHistory } from "@umijs/max"
 import "./index.less"
 
-console.log(marked)
-
 const Markdown = () => {
-  return <ProCard className={"markdown_wrapper"}></ProCard>
+  return (
+    <ProCard className={"markdown_wrapper"}>
+      <MicroAppWithMemoHistory name="react" url="/markdown" />
+    </ProCard>
+  )
 }
 export default Markdown

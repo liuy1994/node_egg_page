@@ -39,12 +39,12 @@ export default [
     icon: "smile",
     component: "./Upload",
   },
-  // {
-  //   path: "/markdown",
-  //   name: "Markdown",
-  //   icon: "smile",
-  //   component: "./Markdown"
-  // },
+  {
+    path: "/markdown",
+    name: "Markdown",
+    icon: "smile",
+    component: "./Markdown",
+  },
   {
     path: "/",
     redirect: "/list",
