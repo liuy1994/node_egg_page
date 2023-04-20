@@ -1,16 +1,22 @@
 import { request } from "@@/exports"
 
-export const getMarkdownDetailApi = (id?: string) => {
-  return request("/api/markdown", {
-    params: { id },
-  })
+export const getMarkdownListApi = () => {
+  return request("/api/markdown")
 }
-export const getMarkdownHistoryApi = () => {
-  return request("/api/markdown/history")
+
+export const getMarkdownDetailApi = (id: string) => {
+  return request(`/api/markdown/${id}`)
 }
-export const postMarkdownApi = (content: string) => {
+
+export const postMarkdownApi = (data: any) => {
   return request("/api/markdown", {
     method: "POST",
-    data: { content },
+    data,
+  })
+}
+export const updateMarkdownApi = (data: any) => {
+  return request(`/api/markdown/${data.id}`, {
+    method: "PUT",
+    data,
   })
 }

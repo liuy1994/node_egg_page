@@ -34,10 +34,14 @@ ul,
 ol {
   list-style: none;
 }
-
-.qiankun-micro-app-container {
-  height: 100%;
-  & > div {
+.qiankun-micro-app-wrapper {
+  & > .ant-spin {
+    margin-top: 36px;
+  }
+  .qiankun-micro-app-container {
     height: 100%;
+    & > div {
+      height: 100%;
+    }
   }
 }
