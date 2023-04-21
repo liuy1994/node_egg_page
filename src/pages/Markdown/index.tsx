@@ -64,12 +64,12 @@ const Markdown = () => {
 
   return (
     <Spin spinning={loading}>
-      {list.some((t) => t.user_id === 3) && (
-        <Row>
-          <Button onClick={onAdd}>添加一个记录</Button>
-        </Row>
-      )}
       <ProCard className={"markdown_wrapper"}>
+        {list.some((t) => t.user_id === 3) && (
+          <Row className={"add-row"}>
+            <Button onClick={onAdd}>添加一个记录</Button>
+          </Row>
+        )}
         <ProForm
           formRef={formRef}
           submitter={{

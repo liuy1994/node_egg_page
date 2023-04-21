@@ -11,9 +11,11 @@ const getEnv = () => {
 const appConfig = {
   development: {
     react: "//localhost:8001",
+    vue: "//localhost:8002",
   },
   prod: {
     react: "//react.0218.life",
+    vue: "//vue.0218.life",
   },
 }
 
@@ -22,6 +24,10 @@ export const qiankun = {
     {
       name: "react",
       entry: appConfig[getEnv()].react,
+    },
+    {
+      name: "vue",
+      entry: appConfig[getEnv()].vue,
     },
   ],
   lifeCycles: {

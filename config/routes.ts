@@ -35,13 +35,13 @@ export default [
   },
   {
     path: "/upload",
-    name: "上传",
+    name: "Upload(Vue 子应用)",
     icon: "smile",
     component: "./Upload",
   },
   {
     path: "/markdown",
-    name: "Markdown",
+    name: "Markdown(React 子应用)",
     icon: "smile",
     component: "./Markdown",
   },
