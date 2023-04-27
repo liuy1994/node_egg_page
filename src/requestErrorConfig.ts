@@ -44,7 +44,10 @@ export const errorConfig: RequestConfig = {
     // 错误接收及处理
     errorHandler: (error: any, opts: any) => {
       if (opts?.skipErrorHandler) throw error
-      const msg = error?.response?.data?.error || "请求出错，请稍后重试"
+      const msg =
+        error?.response?.data?.error?.Message ||
+        error?.response?.data?.error ||
+        "请求出错，请稍后重试"
       if (msg) {
         message.error(msg)
       }

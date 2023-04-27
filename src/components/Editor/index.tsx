@@ -40,7 +40,6 @@ const CustomerEditor = (props: Props) => {
 
   const customUpload = async (file: File, insertFn: InsertFnType) => {
     // TS 语法
-    console.log(file, insertFn)
     const url = await oss.upload(file)
     insertFn(url, file.name, url)
   }
