@@ -10,19 +10,23 @@ class Oss {
   }
 
   async getConfig() {
-    const res = await getOssStsApi()
-    const { credentials, ...config } = res
-    this.cos = new COS({
-      getAuthorization: (options, callback) => {
-        callback({
-          TmpSecretId: credentials.tmpSecretId,
-          TmpSecretKey: credentials.tmpSecretKey,
-          SecurityToken: credentials.sessionToken,
-          StartTime: config.startTime,
-          ExpiredTime: config.expiredTime,
-        })
-      },
-    })
+    try {
+      const res = await getOssStsApi()
+      const { credentials, ...config } = res
+      this.cos = new COS({
+        getAuthorization: (options, callback) => {
+          callback({
+            TmpSecretId: credentials.tmpSecretId,
+            TmpSecretKey: credentials.tmpSecretKey,
+            SecurityToken: credentials.sessionToken,
+            StartTime: config.startTime,
+            ExpiredTime: config.expiredTime,
+          })
+        },
+      })
+    } catch {
+      message.error("暂时关闭了上传功能")
+    }
   }
 
   async upload(file: File): Promise<string> {
@@ -34,26 +38,30 @@ class Oss {
     const key = `/${uploadDay}/${file.name}`
 
     return new Promise((resolve, reject) => {
-      this.cos.putObject(
-        {
-          Bucket: "crud-1317342728",
-          Region: "ap-chengdu",
-          Key: key,
-          Body: file,
-        },
-        (err: any, data: any) => {
-          if (err) {
-            if (err?.message?.includes("CORS")) {
-              message.error("暂时关闭了上传功能")
+      if (this.cos) {
+        this.cos.putObject(
+          {
+            Bucket: "crud-1317342728",
+            Region: "ap-chengdu",
+            Key: key,
+            Body: file,
+          },
+          (err: any, data: any) => {
+            if (err) {
+              if (err?.message?.includes("CORS")) {
+                message.error("暂时关闭了上传功能")
+              } else {
+                message.error("文件上传失败，请稍后重试")
+              }
+              reject(err)
             } else {
-              message.error("文件上传失败，请稍后重试")
+              resolve(`https://${data.Location}`)
             }
-            reject(err)
-          } else {
-            resolve(`https://${data.Location}`)
-          }
-        },
-      )
+          },
+        )
+      } else {
+        message.error("暂时关闭了上传功能")
+      }
     })
   }
 }
