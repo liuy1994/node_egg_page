@@ -34,6 +34,12 @@ export default [
     hideInMenu: true,
   },
   {
+    path: "/large_upload",
+    name: "切片上传",
+    icon: "smile",
+    component: "./LargeUpload",
+  },
+  {
     path: "/upload",
     name: "Upload(Vue 子应用)",
     icon: "smile",

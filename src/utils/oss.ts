@@ -29,13 +29,14 @@ class Oss {
     }
   }
 
-  async upload(file: File): Promise<string> {
+  async upload(file: File | Blob, name?: string, extraFolderName?: string): Promise<string> {
+    console.log(name)
     let date = new Date()
     let year = date.getFullYear()
     let month = date.getMonth() + 1
     let day = date.getDate()
     let uploadDay = `${year}${month < 10 ? `0${month}` : month}${day < 10 ? `0${day}` : day}`
-    const key = `/${uploadDay}/${file.name}`
+    const key = `/${uploadDay}${extraFolderName ? `/${extraFolderName}` : ""}/${name || file.name}`
 
     return new Promise((resolve, reject) => {
       if (this.cos) {
@@ -55,7 +56,8 @@ class Oss {
               }
               reject(err)
             } else {
-              resolve(`https://${data.Location}`)
+              const url = `https://${data.Location}`
+              resolve(url)
             }
           },
         )
