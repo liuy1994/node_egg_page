@@ -69,7 +69,7 @@ const LargeUpload = () => {
 
     setFileList(newFileList)
   }
-  const chunkSize = 512000
+  const chunkSize = 1024000
 
   const getChunks = (file: File) => {
     let base = 0
@@ -91,22 +91,28 @@ const LargeUpload = () => {
 
     const chunks = getChunks(file)
 
+    const tempUrls: string[] = []
+
     try {
       setLoading(1)
       setUrls([])
       setFileList([file])
-      chunks.map(async (chunk, idx) => {
-        const url = await oss.upload(chunk, `${file.name}_${idx}`, file.name)
-        setUrls((pre) => [...pre, url])
-        setLoading((pre) => {
-          let base = pre === 1 ? 0 : pre
-          return Number((base + 100 / chunks.length).toFixed(0))
-        })
-      })
+      await Promise.all(
+        chunks.map(async (chunk, idx) => {
+          const url = await oss.upload(chunk, `${file.name}_${idx}`, file.name)
+          tempUrls.push(url)
+          setLoading((pre) => {
+            let base = pre === 1 ? 0 : pre
+            return Number((base + 100 / chunks.length).toFixed(0))
+          })
+          return true
+        }),
+      )
     } finally {
       setTimeout(() => {
         setLoading(0)
       }, 100)
+      setUrls(tempUrls)
     }
     return false
   }
@@ -131,7 +137,7 @@ const LargeUpload = () => {
             "https://crud-1317342728.cos.ap-chengdu.myqcloud.com/20230506/u%3D35572153%2C3212164277%26fm%3D253%26fmt%3Dauto%26app%3D138%26f%3DJPEG.webp"
           }
           alt=""
-          style={{ maxHeight: 640, objectFit: "contain" }}
+          style={{ maxWidth: 800, objectFit: "contain" }}
         />
       </div>
     </div>
