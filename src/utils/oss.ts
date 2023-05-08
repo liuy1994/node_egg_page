@@ -30,7 +30,6 @@ class Oss {
   }
 
   async upload(file: File | Blob, name?: string, extraFolderName?: string): Promise<string> {
-    console.log(name)
     let date = new Date()
     let year = date.getFullYear()
     let month = date.getMonth() + 1

@@ -1,42 +1,54 @@
 import Oss from "@/utils/oss"
-import { Button, Image, message, Progress, Upload } from "antd"
+import { Button, message, Progress, Upload } from "antd"
 import type { UploadFile } from "antd/es/upload/interface"
 import { useEffect, useState } from "react"
 
 const oss = new Oss()
 
 const LargeUpload = () => {
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState<number>(0)
   const [fileList, setFileList] = useState<UploadFile[]>([])
-
-  const urls = [
-    "https://crud-1317342728.cos.ap-chengdu.myqcloud.com/20230506/test.jpg/test.jpg_0",
-    "https://crud-1317342728.cos.ap-chengdu.myqcloud.com/20230506/test.jpg/test.jpg_1",
-  ]
+  const [urls, setUrls] = useState<string[]>([])
+  const [finalUrl, setFinalUrl] = useState<string>("")
 
   useEffect(() => {
-    getFile()
-  }, [])
+    if (urls.length) {
+      getFile()
+    } else {
+      setFinalUrl("")
+    }
+  }, [urls])
+
+  useEffect(() => {
+    if (!fileList.length) {
+      setUrls([])
+    }
+  }, [fileList])
+
+  const getIdx = (url: string) => {
+    const splitIdx = url.lastIndexOf("_")
+    return Number(url.slice(splitIdx + 1))
+  }
 
   const getName = (url: string) => {
-    const arr = url.split("/")
-    const last = arr.at(-1)
-    const arr2 = last?.split("_") || []
-    return arr2?.slice(0, arr2.length - 1).join("") || ""
+    const lastName = url.slice(url.lastIndexOf("/") + 1)
+    return lastName.slice(0, lastName.lastIndexOf("_"))
   }
   const getFile = async () => {
     const name = getName(urls[0])
     const blobs = await Promise.all(
-      urls.map(async (url) => {
-        const res = await fetch(url)
-        const blob = await res.blob()
-        return blob
-      }),
+      urls
+        .sort((a, b) => getIdx(a) - getIdx(b))
+        .map(async (url) => {
+          const res = await fetch(url)
+          const blob = await res.blob()
+          return blob
+        }),
     )
     const data = new Blob(blobs)
     const file = new File([data], name)
     const blobUrl = URL.createObjectURL(file)
-    console.log(blobUrl)
+    setFinalUrl(blobUrl)
   }
 
   const handleChange: any = (info: any) => {
@@ -57,7 +69,7 @@ const LargeUpload = () => {
 
     setFileList(newFileList)
   }
-  const chunkSize = 500000
+  const chunkSize = 512000
 
   const getChunks = (file: File) => {
     let base = 0
@@ -70,43 +82,56 @@ const LargeUpload = () => {
   }
 
   const beforeUpload = async (file: any) => {
-    if (file.size! > 10240000) {
-      return message.error("太大了")
+    if (file.size! <= chunkSize) {
+      return message.error("太小了，切不了片")
+    }
+    if (file.size! > 20480000) {
+      return message.error("真的太大了")
     }
 
     const chunks = getChunks(file)
-    console.log(chunks)
 
     try {
-      setLoading(true)
-      setFileList(fileList.concat(file))
+      setLoading(1)
+      setUrls([])
+      setFileList([file])
       chunks.map(async (chunk, idx) => {
         const url = await oss.upload(chunk, `${file.name}_${idx}`, file.name)
-        console.log({ url })
+        setUrls((pre) => [...pre, url])
+        setLoading((pre) => {
+          let base = pre === 1 ? 0 : pre
+          return Number((base + 100 / chunks.length).toFixed(0))
+        })
       })
     } finally {
-      setLoading(false)
+      setTimeout(() => {
+        setLoading(0)
+      }, 100)
     }
     return false
   }
 
   return (
     <div className="large_upload">
-      <p>仅供测试，不要真的上传大文件</p>
+      <p>仅供测试，不要真的上传大大大文件</p>
       <Upload
         beforeUpload={beforeUpload}
         accept="image/*"
-        disabled={loading}
+        disabled={loading !== 0 && loading !== 100}
         fileList={fileList}
         onChange={handleChange}
       >
         <Button type="primary">上传</Button>
       </Upload>
-      {loading && <Progress percent={99} />}
+      {Boolean(loading) && <Progress percent={loading} />}
       <div style={{ marginBlock: 20 }}>
-        <Image
-          src="https://crud-1317342728.cos.ap-chengdu.myqcloud.com/20230506/u%3D35572153%2C3212164277%26fm%3D253%26fmt%3Dauto%26app%3D138%26f%3DJPEG.webp"
-          sizes="120"
+        <img
+          src={
+            finalUrl ||
+            "https://crud-1317342728.cos.ap-chengdu.myqcloud.com/20230506/u%3D35572153%2C3212164277%26fm%3D253%26fmt%3Dauto%26app%3D138%26f%3DJPEG.webp"
+          }
+          alt=""
+          style={{ maxHeight: 640, objectFit: "contain" }}
         />
       </div>
     </div>
