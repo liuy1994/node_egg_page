@@ -119,7 +119,15 @@ const LargeUpload = () => {
 
   return (
     <div className="large_upload">
-      <p>仅供测试，不要真的上传大大大文件</p>
+      <p>
+        <span>仅供测试，不要真的上传大大大文件，</span>
+        <a
+          href="https://crud-1317342728.cos.ap-chengdu.myqcloud.com/20230508/123123.jpg"
+          target="blank"
+        >
+          可以用这个文件做测试
+        </a>
+      </p>
       <Upload
         beforeUpload={beforeUpload}
         accept="image/*"
