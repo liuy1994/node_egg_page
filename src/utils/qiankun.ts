@@ -1,7 +1,8 @@
 const getEnv = () => {
+  if (isDev) return "development"
   const hostname = location.hostname
   switch (hostname) {
-    case "demo.0218.life":
+    case "blog.0218.life":
       return "prod"
     default:
       return "development"

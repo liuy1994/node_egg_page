@@ -5,7 +5,7 @@ import defaultSettings from "./defaultSettings"
 import proxy from "./proxy"
 import routes from "./routes"
 
-const { REACT_APP_ENV = "dev" } = process.env
+const { REACT_APP_ENV = "dev", UMI_ENV } = process.env
 
 export default defineConfig({
   /**
@@ -163,5 +163,8 @@ export default defineConfig({
         strictStyleIsolation: true,
       },
     },
+  },
+  define: {
+    isDev: UMI_ENV === "dev",
   },
 })
